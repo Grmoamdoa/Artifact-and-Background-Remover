@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Artifact Remover</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel">
+        <div class="panel-copy">
+          <p class="eyebrow">Local, free image cleanup</p>
+          <h1>Artifact Remover</h1>
+          <p class="intro">
+            Clean flat-background images in two ways: remove selected artifacts,
+            then switch tabs to cut the background into true transparency.
+          </p>
+        </div>
+
+        <label class="upload-field">
+          <span>Choose image</span>
+          <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp" />
+        </label>
+
+        <div class="mode-tabs" role="tablist" aria-label="Editor modes">
+          <button
+            id="artifactTab"
+            class="mode-tab is-active"
+            type="button"
+            data-mode="artifact"
+            aria-pressed="true"
+          >
+            Artifact Remover
+          </button>
+          <button
+            id="backgroundTab"
+            class="mode-tab"
+            type="button"
+            data-mode="background"
+            aria-pressed="false"
+          >
+            Background Remover
+          </button>
+        </div>
+
+        <section id="artifactControls" class="mode-section">
+          <div class="control-group">
+            <label for="fillMode">Fill style</label>
+            <select id="fillMode">
+              <option value="solid">Solid background match</option>
+              <option value="gradient">Soft gradient match</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="sampleRadius">
+              Sample range
+              <output id="sampleRadiusValue">18 px</output>
+            </label>
+            <input id="sampleRadius" type="range" min="6" max="48" value="18" />
+          </div>
+
+          <div class="control-group">
+            <label for="selectionExpand">
+              Expand removal
+              <output id="selectionExpandValue">0 px</output>
+            </label>
+            <input id="selectionExpand" type="range" min="0" max="30" value="0" />
+          </div>
+
+          <button id="removeButton" type="button" disabled>Remove selection</button>
+        </section>
+
+        <section id="backgroundControls" class="mode-section" hidden>
+          <p class="helper-copy">
+            Auto-detect starts from the corners and edges. Add manual background
+            samples if the first pass misses part of the backdrop.
+          </p>
+
+          <button id="removeBackgroundButton" type="button" disabled>Remove Background</button>
+
+          <div class="button-row">
+            <button id="sampleToolButton" class="secondary tool-button is-active" type="button" disabled>
+              Add Background Samples
+            </button>
+            <button id="restoreToolButton" class="secondary tool-button" type="button" disabled>
+              Restore Details
+            </button>
+          </div>
+
+          <button id="clearSamplesButton" class="ghost" type="button" disabled>
+            Clear Sample Points
+          </button>
+
+          <p id="sampleSummary" class="helper-copy">
+            0 manual background samples added.
+          </p>
+
+          <div class="control-group">
+            <label for="thresholdRange">
+              Background threshold
+              <output id="thresholdValue">13</output>
+            </label>
+            <input id="thresholdRange" type="range" min="10" max="24" value="13" />
+            <p id="thresholdHint" class="helper-copy threshold-hint">
+              Sweet spot: 13 is safest, 14-15 can help on stubborn background, and 16+ is risky.
+            </p>
+          </div>
+
+          <div class="control-group">
+            <label for="featherRange">
+              Soft edge
+              <output id="featherValue">1 px</output>
+            </label>
+            <input id="featherRange" type="range" min="0" max="12" value="1" />
+          </div>
+
+          <div class="control-group">
+            <label for="brushSizeRange">
+              Restore brush size
+              <output id="brushSizeValue">28 px</output>
+            </label>
+            <input id="brushSizeRange" type="range" min="8" max="120" value="28" />
+          </div>
+        </section>
+
+        <div class="control-group">
+          <label for="filenameInput">Download name</label>
+          <input
+            id="filenameInput"
+            type="text"
+            placeholder="artifact-removed"
+            maxlength="120"
+            disabled
+          />
+        </div>
+
+        <div class="button-row">
+          <button id="undoButton" class="secondary" type="button" disabled>Undo</button>
+          <button id="resetButton" type="button" disabled>Reset image</button>
+        </div>
+
+        <button id="downloadButton" class="secondary" type="button" disabled>Download PNG</button>
+
+        <p id="status" class="status">
+          Upload an image to begin. Artifact mode works best on flat backgrounds,
+          and background mode can cut those backgrounds to transparency.
+        </p>
+      </section>
+
+      <section class="canvas-panel">
+        <div class="canvas-header">
+          <p id="canvasTitle">Draw a box around the object to remove.</p>
+          <p id="canvasHint" class="canvas-hint">Click and drag on the image.</p>
+        </div>
+        <div class="canvas-stage">
+          <canvas id="editorCanvas" aria-label="Image editor canvas"></canvas>
+          <p id="emptyState" class="empty-state">
+            Upload an image to start editing.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
