@@ -52,27 +52,3 @@ Then open [http://localhost:4173](http://localhost:4173).
 ### Option 2: Open the file directly
 
 You can also try opening `index.html` directly in a browser, though a local server is usually more reliable.
-
-## Publish on GitHub Pages
-
-This project is now set up for GitHub Pages with a GitHub Actions workflow in `.github/workflows/deploy-pages.yml`.
-
-### One-time setup
-
-1. Push this project to a GitHub repository.
-2. In that repository, open `Settings` -> `Pages`.
-3. Set the source to `GitHub Actions`.
-4. Push to the `main` branch, or run the `Deploy GitHub Pages` workflow manually from the `Actions` tab.
-
-### Your public link
-
-- If the repository is named something like `artifact-remover`, the site URL will usually be:
-  - `https://YOUR-USERNAME.github.io/artifact-remover/`
-- If you publish from a repository named `YOUR-USERNAME.github.io`, the site can live at:
-  - `https://YOUR-USERNAME.github.io/`
-
-The app already uses relative paths for `style.css` and `app.js`, so it is safe to host from a GitHub Pages project URL.
-
-## Next upgrade ideas
-
-If you want, the next upgrade can be a stronger local inpainting or segmentation path using Python, OpenCV, or a local model. That would handle harder scenes, but it would also be heavier than this fully browser-based version.
